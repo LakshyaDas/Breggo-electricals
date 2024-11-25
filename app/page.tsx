@@ -94,15 +94,22 @@ export default function Home() {
               decade of experience, we have established ourselves as a trusted name in the
               electrical industry.
             </p>
-            <div className="flex justify-center gap-4">
-              <Button variant="outline" className="gap-2">
-                <Phone className="w-4 h-4" />
-                Contact Us
-              </Button>
-              <Link href="/products">
-                <Button className="bg-blue-600 hover:bg-blue-700">View Products</Button>
-              </Link>
-            </div>
+           <div className="flex justify-center gap-4">
+  <Button variant="outline" className="gap-2" onClick={handleCall}>
+    <Phone className="w-4 h-4" />
+    Contact Us
+  </Button>
+  <Link href="/products">
+    <Button className="bg-blue-600 hover:bg-blue-700">View Products</Button>
+  </Link>
+</div>
+
+<script>
+  const handleCall = () => {
+    window.location.href = 'tel:+917489789842';
+  };
+</script>
+
           </motion.div>
         </div>
       </section>
