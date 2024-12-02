@@ -35,10 +35,10 @@ export function ReviewProvider({ children }: { children: ReactNode }) {
     },
     {
       id: 3,
-      name: 'Hritik Vishwakarma',
+      name: 'Ansh Tiwari',
       rating: 4,
       review: 'Great experience working with Breggo Electricals. Would recommend!',
-      date: '2024-02-26',
+      date: '2024-11-07',
     },
   ]);
 
