@@ -67,7 +67,7 @@ export default function Navbar() {
                 Products
               </Link>
               <Link
-                href="/#reviews"
+                href="/reviews"
                 className="text-gray-700 hover:text-blue-600 transition-colors"
                 onClick={() => setIsOpen(false)}
               >
