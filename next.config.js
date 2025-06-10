@@ -6,7 +6,7 @@ const nextConfig = {
   images: {
     unoptimized: true, // Only necessary for static export
   },
-  output: 'export', // Remove this if not creating a fully static site
+ // Remove this if not creating a fully static site
 };
 
 module.exports = nextConfig;

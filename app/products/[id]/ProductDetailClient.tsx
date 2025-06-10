@@ -6,12 +6,13 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 
 interface Product {
-  id: number;
+  id: string;
   name: string;
-  price: string;
+  price: number;
   description: string;
   image: string;
 }
+
 
 export default function ProductDetailClient({ product }: { product: Product }) {
   const handleWhatsApp = () => {

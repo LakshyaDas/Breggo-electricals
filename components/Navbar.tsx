@@ -25,7 +25,7 @@ export default function Navbar() {
             <Link href="/products" className="text-gray-700 hover:text-blue-600 transition-colors">
               Products
             </Link>
-            <Link href="/#reviews" className="text-gray-700 hover:text-blue-600 transition-colors">
+            <Link href="/reviews" className="text-gray-700 hover:text-blue-600 transition-colors">
               Reviews
             </Link>
           </div>

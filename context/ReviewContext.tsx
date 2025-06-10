@@ -1,60 +1,57 @@
 'use client';
 
-import { createContext, useContext, useState, ReactNode } from 'react';
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from 'react';
+import {
+  collection,
+  onSnapshot,
+  query,
+  orderBy,
+} from 'firebase/firestore';
+import { db } from '@/lib/firebaseConfig';
 
 interface Review {
-  id: number;
+  id: string;
   name: string;
   rating: number;
-  review: string;
-  date: string;
+  comment: string; // renamed from "review"
+  createdAt: string;
 }
 
 interface ReviewContextType {
   reviews: Review[];
-  addReview: (review: Omit<Review, 'id' | 'date'>) => void;
+  showAll: boolean;
+  toggleShowAll: () => void;
 }
 
 const ReviewContext = createContext<ReviewContextType | undefined>(undefined);
 
 export function ReviewProvider({ children }: { children: ReactNode }) {
-  const [reviews, setReviews] = useState<Review[]>([
-    {
-      id: 1,
-      name: 'Lakshya Das',
-      rating: 5,
-      review: 'Excellent products and outstanding service! The quality is unmatched.',
-      date: '2024-02-28',
-    },
-    {
-      id: 2,
-      name: 'Vishal',
-      rating: 5,
-      review: 'Very professional team and high-quality electrical products.',
-      date: '2024-02-27',
-    },
-    {
-      id: 3,
-      name: 'Hritik Vishwakarma',
-      rating: 4,
-      review: 'Great experience working with Breggo Electricals. Would recommend!',
-      date: '2024-02-26',
-    },
-  ]);
+  const [reviews, setReviews] = useState<Review[]>([]);
+  const [showAll, setShowAll] = useState(false);
 
-  const addReview = (newReview: Omit<Review, 'id' | 'date'>) => {
-    setReviews(prev => [
-      {
-        ...newReview,
-        id: Date.now(),
-        date: new Date().toISOString().split('T')[0],
-      },
-      ...prev,
-    ]);
-  };
+  useEffect(() => {
+    const q = query(collection(db, 'reviews'), orderBy('createdAt', 'desc'));
+    const unsubscribe = onSnapshot(q, snapshot => {
+      const fetchedReviews: Review[] = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...(doc.data() as Omit<Review, 'id'>),
+      }));
+      setReviews(fetchedReviews);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  const toggleShowAll = () => setShowAll(prev => !prev);
 
   return (
-    <ReviewContext.Provider value={{ reviews, addReview }}>
+    <ReviewContext.Provider value={{ reviews, showAll, toggleShowAll }}>
       {children}
     </ReviewContext.Provider>
   );

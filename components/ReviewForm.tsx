@@ -6,12 +6,15 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { Button } from '@/components/ui/button';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import {
+  Form, FormControl, FormField, FormItem,
+  FormLabel, FormMessage
+} from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/components/ui/use-toast';
-import { useReviews } from '@/context/ReviewContext';
 
+// Zod validation schema
 const formSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
   email: z.string().email('Invalid email address'),
@@ -21,7 +24,6 @@ const formSchema = z.object({
 
 export default function ReviewForm() {
   const { toast } = useToast();
-  const { addReview } = useReviews();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -36,19 +38,37 @@ export default function ReviewForm() {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsSubmitting(true);
-    
-    addReview({
-      name: values.name,
-      rating: parseInt(values.rating),
-      review: values.review,
-    });
-    
-    toast({
-      title: 'Review submitted!',
-      description: 'Thank you for sharing your experience.',
-    });
-    
-    form.reset();
+
+    try {
+      const res = await fetch('/api/reviews', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: values.name,
+          email: values.email,
+          rating: parseInt(values.rating),
+          comment: values.review,
+        }),
+      });
+
+      if (!res.ok) throw new Error('Failed to submit review');
+
+      toast({
+        title: 'Review submitted!',
+        description: 'Thank you for sharing your experience.',
+      });
+
+      form.reset();
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: 'Something went wrong. Please try again.',
+        variant: 'destructive',
+      });
+    }
+
     setIsSubmitting(false);
   };
 

@@ -97,7 +97,7 @@ export default function Home() {
             <div className="flex justify-center gap-4">
               <Button variant="outline" className="gap-2">
                 <Phone className="w-4 h-4" />
-                Contact Us
+                <Link href="tel:+91 7489789842">Contact Us </Link>
               </Button>
               <Link href="/products">
                 <Button className="bg-blue-600 hover:bg-blue-700">View Products</Button>

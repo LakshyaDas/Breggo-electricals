@@ -1,25 +1,22 @@
 import ProductDetailClient from './ProductDetailClient';
-import { products } from '@/lib/data';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '@/lib/firebaseConfig';
 
-// Define the Product Type
+
+
 interface Product {
-  id: number;
+  id: string;
   name: string;
-  price: string;
+  price: number;
   description: string;
   image: string;
 }
 
-export async function generateStaticParams() {
-  return products.map((product: Product) => ({
-    id: product.id.toString(),
-  }));
-}
+export default async function ProductDetailPage({ params }: { params: { id: string } }) {
+  const docRef = doc(db, 'products', params.id);
+  const docSnap = await getDoc(docRef);
 
-export default function ProductDetailPage({ params }: { params: { id: string } }) {
-  const product = products.find((p: Product) => p.id === parseInt(params.id));
-
-  if (!product) {
+  if (!docSnap.exists()) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
@@ -28,6 +25,11 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
       </div>
     );
   }
+
+  const product: Product = {
+    id: docSnap.id,
+    ...docSnap.data(),
+  } as Product;
 
   return <ProductDetailClient product={product} />;
 }
