@@ -22,7 +22,7 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div className="max-w-sm mx-auto py-20">
+    <div className="max-w-sm mx-auto p-10">
       <h2 className="text-2xl font-semibold mb-4">Admin Login</h2>
       {error && <p className="text-red-500 mb-2">{error}</p>}
       <input
