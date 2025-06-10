@@ -42,7 +42,7 @@ export default function ProductCard({ product }: { product: Product }) {
               />
             </div>
             <CardTitle className="pt-8 ">{product.name}</CardTitle>
-            <CardDescription >{product.price}</CardDescription>
+            <CardDescription >₹{product.price}</CardDescription>
           </CardHeader>
           <CardContent>
             <p className="text-gray-600 ">{product.description}</p>
